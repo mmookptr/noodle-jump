@@ -42,6 +42,13 @@ class NoodleJump(arcade.Window):
 
         self.background = None
 
+        # game level
+        self.leve1_1 = None
+        self.level_2 = None
+        self.leve1_3 = None
+        self.level_4 = None
+        self.level_5 = None
+
     def setup(self):
 
         self.wall_list = arcade.SpriteList()
