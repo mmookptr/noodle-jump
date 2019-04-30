@@ -121,7 +121,7 @@ class NoodleJump(arcade.Window):
 
         # player 1
         self.player1_sprite = arcade.Sprite(
-            "images/character1.png", SPRITE_SCALING)
+            "images/character.png", SPRITE_SCALING)
         self.player_list.append(self.player1_sprite)
 
         # player1 falling position
@@ -133,7 +133,7 @@ class NoodleJump(arcade.Window):
                                                               gravity_constant=GRAVITY)
         # player 2
         self.player2_sprite = arcade.Sprite(
-            "images/character2.png", SPRITE_SCALING)
+            "images/character.png", SPRITE_SCALING)
         self.player_list.append(self.player2_sprite)
 
         # player2 falling position
