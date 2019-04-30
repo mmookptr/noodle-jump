@@ -187,6 +187,7 @@ class NoodleJump(arcade.Window):
         if key == arcade.key.W:
             if self.physics1_engine.can_jump():
                 self.player1_sprite.change_y = JUMP_SPEED
+
         elif key == arcade.key.A:
             self.player1_sprite.change_x = -MOVEMENT_SPEED
         elif key == arcade.key.D:
