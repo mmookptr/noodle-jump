@@ -73,9 +73,9 @@ class NoodleJump(arcade.Window):
                     self.wall_list.append(wall)
                 wall.bottom *= 2
 
-        noodle_map = [[10, 11, 1.8], [2, 3, 6.6], [14, 15, 1.8],
-                      [12, 13, 1.8], [22, 23, 6.6], [12, 13, 4.2],
-                      [4, 5, 4.2], [20, 21, 4.2], [9, 16, 6.1]]
+        noodle_map = [[10, 11, 2.5], [2, 3, 7.3], [14, 15, 2.5],
+                      [12, 13, 2.5], [22, 23, 7.3], [12, 13, 4.9],
+                      [4, 5, 4.9], [20, 21, 4.9], [9, 16, 6.1]]
         for i in range(len(noodle_map)):
             for x in range(SPRITE_SIZE * noodle_map[i][0], SPRITE_SIZE * noodle_map[i][1], SPRITE_SIZE):
                 for k in range(1):
