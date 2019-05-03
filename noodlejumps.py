@@ -30,7 +30,7 @@ class NoodleJump(arcade.Window):
         self.wall_list = None
         self.player_list = None
         self.noodle_list = None
-        self.gold_noodle_list = None
+        self.door_list = None
 
         self.wall_left = None
         self.wall_right = None
@@ -47,14 +47,18 @@ class NoodleJump(arcade.Window):
         self.player1_score = 0
         self.player2_score = 0
 
+        self.head = None
+
         self.level = 1
+
+    # def menu(self):
 
     def level_1(self):
 
-        self.level = arcade.Sprite("images/level1.png", SPRITE_SCALING)
-        self.level.left = 350
-        self.level.bottom = 770
-        self.level.draw()
+        self.head = arcade.Sprite("images/level1.png", SPRITE_SCALING)
+        self.head.left = 350
+        self.head.bottom = 770
+        self.head.draw()
 
         map = [[3, 6, 1.3], [19, 22, 1.3], [5, 8, 2.5],
                [17, 20, 2.5], [4, 6, 3.7], [19, 21, 3.7],
@@ -87,37 +91,36 @@ class NoodleJump(arcade.Window):
 
         for j in range(SPRITE_SIZE * 12, SPRITE_SIZE * 13, SPRITE_SIZE):
             for p in range(1):
-                gold_noodle = arcade.Sprite(
-                    'images/goldennoodle.png', SPRITE_SCALING)
-                gold_noodle.bottom = SPRITE_SIZE * 11
-                gold_noodle.left = j
-                self.gold_noodle_list.append(gold_noodle)
-            gold_noodle.bottom *= 2
+                door = arcade.Sprite(
+                    'images/door.png', SPRITE_SCALING)
+                door.bottom = SPRITE_SIZE * 11
+                door.left = j
+                self.door_list.append(door)
+            door.bottom *= 2
 
-    def setup(self):
+    def level_3(self):
+        self.level_init()
 
-        self.wall_list = arcade.SpriteList()
-        self.noodle_list = arcade.SpriteList()
-        self.gold_noodle_list = arcade.SpriteList()
-        self.player_list = arcade.SpriteList()
-        self.enemy_list = arcade.SpriteList()
-        # floor
-        for x in range(-1, 50, SPRITE_SIZE):
+        self.head = arcade.Sprite("images/level2.png", SPRITE_SCALING)
+        self.head.left = 350
+        self.head.bottom = 770
+        self.head.draw()
+
+        for x in range(0, 800, SPRITE_SIZE):
             wall = arcade.Sprite("images/platform1.png", SPRITE_SCALING)
 
             wall.bottom = 0
             wall.left = x
 
             self.wall_list.append(wall)
-        for x in range(800, 750, -SPRITE_SIZE):
+
+        for x in range(0, 800, SPRITE_SIZE):
             wall = arcade.Sprite("images/platform1.png", SPRITE_SCALING)
 
-            wall.bottom = 0
-            wall.right = x
-            self.wall_list.append(wall)
+            wall.bottom = 350
+            wall.left = x
 
-        # build the platform total of 25 blocks
-        self.level_1()
+            self.wall_list.append(wall)
 
         # player 1
         self.player1_sprite = arcade.Sprite(
@@ -125,7 +128,7 @@ class NoodleJump(arcade.Window):
         self.player_list.append(self.player1_sprite)
 
         # player1 falling position
-        self.player1_sprite.center_x = 10
+        self.player1_sprite.center_x = 70
         self.player1_sprite.center_y = 10
 
         self.physics1_engine = arcade.PhysicsEnginePlatformer(self.player1_sprite,
@@ -137,7 +140,154 @@ class NoodleJump(arcade.Window):
         self.player_list.append(self.player2_sprite)
 
         # player2 falling position
-        self.player2_sprite.center_x = 790
+        self.player2_sprite.center_x = 70
+        self.player2_sprite.center_y = 10
+
+        self.physics2_engine = arcade.PhysicsEnginePlatformer(self.player2_sprite,
+                                                              self.wall_list,
+                                                              gravity_constant=GRAVITY)
+
+    def level_2(self):
+        self.level_init()
+
+        self.head = arcade.Sprite("images/level3.png", SPRITE_SCALING)
+        self.head.left = 350
+        self.head.bottom = 770
+        self.head.draw()
+
+        for x in range(29, 200, SPRITE_SIZE):
+            wall = arcade.Sprite("images/platform1.png", SPRITE_SCALING)
+
+            wall.bottom = 0
+            wall.left = x
+
+            self.wall_list.append(wall)
+        for x in range(770, 590, -SPRITE_SIZE):
+            wall = arcade.Sprite("images/platform1.png", SPRITE_SCALING)
+
+            wall.bottom = 0
+            wall.right = x
+            self.wall_list.append(wall)
+
+        # player 1
+        self.player1_sprite = arcade.Sprite(
+            "images/character1.png", SPRITE_SCALING)
+        self.player_list.append(self.player1_sprite)
+
+        # player1 falling position
+        self.player1_sprite.center_x = 70
+        self.player1_sprite.center_y = 10
+
+        self.physics1_engine = arcade.PhysicsEnginePlatformer(self.player1_sprite,
+                                                              self.wall_list,
+                                                              gravity_constant=GRAVITY)
+        # player 2
+        self.player2_sprite = arcade.Sprite(
+            "images/character2.png", SPRITE_SCALING)
+        self.player_list.append(self.player2_sprite)
+
+        # player2 falling position
+        self.player2_sprite.center_x = 710
+        self.player2_sprite.center_y = 10
+
+        self.physics2_engine = arcade.PhysicsEnginePlatformer(self.player2_sprite,
+                                                              self.wall_list,
+                                                              gravity_constant=GRAVITY)
+
+        map = [[6, 7, 1.3], [18, 19, 1.3], [3, 4, 2.5], [21, 22, 2.5],
+               [6, 7, 3.7], [18, 19, 3.7], [3, 4, 4.9], [21, 22, 4.9],
+               [6, 7, 6.1], [18, 19, 6.1], [3, 4, 7.3], [21, 22, 7.3],
+               [6, 7, 8.5], [18, 19, 8.5], [3, 4, 9.7], [21, 22, 9.7],
+               [6, 11, 10.9], [14, 19, 10.9], [10, 11, 10.4], [14, 15, 10.4],
+               [10, 11, 9.9], [14, 15, 9.9], [10, 11, 9.4], [14, 15, 9.4],
+               [10, 11, 8.9], [14, 15, 8.9], [10, 11, 8.4], [14, 15, 8.4],
+               [10, 11, 7.9], [14, 15, 7.9], [10, 11, 7.4], [14, 15, 7.4],
+               [10, 15, 6.9], [9, 16, 4.1]]
+        for i in range(len(map)):
+            for x in range(SPRITE_SIZE * map[i][0], SPRITE_SIZE * map[i][1], SPRITE_SIZE):
+                for k in range(1):
+                    wall = arcade.Sprite(
+                        'images/platform2.png', SPRITE_SCALING)
+                    wall.bottom = SPRITE_SIZE * map[i][2]
+                    wall.left = x
+                    self.wall_list.append(wall)
+                wall.bottom *= 2
+
+        noodle_map = [[6, 7, 2.5], [18, 19, 2.5], [3, 4, 3.7], [21, 22, 3.7],
+                      [6, 7, 4.9], [18, 19, 4.9], [3, 4, 6.1], [21, 22, 6.1],
+                      [6, 7, 7.3], [18, 19, 7.3], [3, 4, 8.5], [21, 22, 8.5],
+                      [11, 14, 5.3]]
+        for i in range(len(noodle_map)):
+            for x in range(SPRITE_SIZE * noodle_map[i][0], SPRITE_SIZE * noodle_map[i][1], SPRITE_SIZE):
+                for k in range(1):
+                    noodle = arcade.Sprite('images/noodle.png', SPRITE_SCALING)
+                    noodle.bottom = SPRITE_SIZE * noodle_map[i][2]
+                    noodle.left = x
+                    self.noodle_list.append(noodle)
+                noodle.bottom *= 2
+
+        for j in range(SPRITE_SIZE * 12, SPRITE_SIZE * 13, SPRITE_SIZE):
+            for p in range(1):
+                door = arcade.Sprite(
+                    'images/door.png', SPRITE_SCALING)
+                door.bottom = SPRITE_SIZE * 7.4
+                door.left = j
+                self.door_list.append(door)
+            door.bottom *= 2
+
+    def level_init(self):
+        self.wall_list = arcade.SpriteList()
+        self.noodle_list = arcade.SpriteList()
+        self.door_list = arcade.SpriteList()
+        self.player_list = arcade.SpriteList()
+        self.enemy_list = arcade.SpriteList()
+
+    def setup(self):
+        self.level_init()
+
+        # floor
+        for x in range(49, 100, SPRITE_SIZE):
+            wall = arcade.Sprite("images/platform1.png", SPRITE_SCALING)
+
+            wall.bottom = 0
+            wall.left = x
+
+            self.wall_list.append(wall)
+        for x in range(750, 700, -SPRITE_SIZE):
+            wall = arcade.Sprite("images/platform1.png", SPRITE_SCALING)
+
+            wall.bottom = 0
+            wall.right = x
+            self.wall_list.append(wall)
+
+        # build the platform total of 25 blocks
+        if self.level == 1:
+            self.level_1()
+        elif self.level == 2:
+            self.level_2()
+        elif self.level == 3:
+            self.level_3()
+        # self.level_2()
+
+        # player 1
+        self.player1_sprite = arcade.Sprite(
+            "images/character1.png", SPRITE_SCALING)
+        self.player_list.append(self.player1_sprite)
+
+        # player1 falling position
+        self.player1_sprite.center_x = 70
+        self.player1_sprite.center_y = 10
+
+        self.physics1_engine = arcade.PhysicsEnginePlatformer(self.player1_sprite,
+                                                              self.wall_list,
+                                                              gravity_constant=GRAVITY)
+        # player 2
+        self.player2_sprite = arcade.Sprite(
+            "images/character2.png", SPRITE_SCALING)
+        self.player_list.append(self.player2_sprite)
+
+        # player2 falling position
+        self.player2_sprite.center_x = 710
         self.player2_sprite.center_y = 10
 
         self.physics2_engine = arcade.PhysicsEnginePlatformer(self.player2_sprite,
@@ -156,31 +306,32 @@ class NoodleJump(arcade.Window):
         self.player_list.draw()
         self.wall_list.draw()
         self.noodle_list.draw()
-        self.gold_noodle_list.draw()
+        self.door_list.draw()
 
         player1 = arcade.Sprite("images/player1.png", SPRITE_SCALING)
         player1.left = 20
         player1.bottom = 770
         player1.draw()
         score = arcade.Sprite('images/score.png', SPRITE_SCALING)
-        score.left = 30
+        score.left = 20
         score.bottom = 740
         score.draw()
-        score.left = 690
+        score.left = 680
         score.bottom = 740
         score.draw()
 
         output = f"{self.player1_score}"
-        arcade.draw_text(output, 100, 740, arcade.color.BLACK_BEAN, 12)
+        arcade.draw_text(output, 90, 740, arcade.color.BLACK_BEAN, 12)
 
         player2 = arcade.Sprite("images/player2.png", SPRITE_SCALING)
         player2.left = 680
         player2.bottom = 770
         player2.draw()
         output = f"{self.player2_score}"
-        arcade.draw_text(output, 760, 740, arcade.color.BLACK_BEAN, 12)
+        arcade.draw_text(output, 750, 740, arcade.color.BLACK_BEAN, 12)
 
-        self.level.draw()
+        # self.level.draw()
+        self.head.draw()
 
     def on_key_press(self, key, modifiers):
         # player1
@@ -203,9 +354,6 @@ class NoodleJump(arcade.Window):
             self.player2_sprite.change_x = MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
-        """
-        Called when the user presses a mouse button.
-        """
         if key == arcade.key.A or key == arcade.key.D:
             self.player1_sprite.change_x = 0
 
@@ -218,7 +366,7 @@ class NoodleJump(arcade.Window):
         if not self.game_over:
             # Move the enemies
             self.noodle_list.update()
-            self.gold_noodle_list.update()
+            self.door_list.update()
 
             # check if any player hit any noodle
             player1_hit_list = arcade.check_for_collision_with_list(
@@ -226,10 +374,13 @@ class NoodleJump(arcade.Window):
             player2_hit_list = arcade.check_for_collision_with_list(
                 self.player2_sprite, self.noodle_list)
 
-            # remove noodle got hit by any player
-            # for coin in hit_list:
-            # coin.kill()
-            # self.score += 1
+            # chech if any player hit gold noodle
+            player1_door_list = arcade.check_for_collision_with_list(
+                self.player1_sprite, self.door_list)
+            player2_door_list = arcade.check_for_collision_with_list(
+                self.player2_sprite, self.door_list)
+
+            # add score by 100 if hits noodle
             for noodle in player1_hit_list:
                 noodle.kill()
                 self.player1_score += 100
@@ -237,6 +388,27 @@ class NoodleJump(arcade.Window):
             for noodle in player2_hit_list:
                 noodle.kill()
                 self.player2_score += 100
+
+            # add score by 300 if hits gold noodle
+            if len(player1_door_list) > 0 and self.level == 1:
+                self.player1_score += 300
+                self.level += 1
+                self.level_2()
+
+            elif len(player2_door_list) > 0 and self.level == 1:
+                self.player2_score += 300
+                self.level += 1
+                self.level_2()
+
+            elif len(player1_door_list) > 0 and self.level == 2:
+                self.player1_score += 300
+                self.level += 1
+                self.level_3()
+
+            elif len(player2_door_list) > 0 and self.level == 2:
+                self.player2_score += 300
+                self.level += 1
+                self.level_3()
 
             # Update the player using the physics engine
             self.physics1_engine.update()
