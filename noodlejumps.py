@@ -11,7 +11,7 @@ SCREEN_HEIGHT = 800
 SCREEN_TITLE = "Noodle jump"
 
 VIEWPORT_MARGIN = 100
-RIGHT_MARGIN = 150
+RIGHT_MAN = 150
 
 MOVEMENT_SPEED = 3
 JUMP_SPEED = 9
@@ -53,10 +53,12 @@ class NoodleJump(arcade.Window):
         self.level = 1
 
         self.instruction = []
+
+        #game state 1= instruction, 2 = game playing , 3 = game over 
         self.current_state = 0
 
         
-        page = arcade.load_texture('images/instructionpage.png')
+        page = arcade.load_texture('images/instructionpage.jpg')
         self.instruction.append(page)
 
     def create_platform(self, map):
@@ -83,8 +85,8 @@ class NoodleJump(arcade.Window):
     def level_1(self):
 
         self.head = arcade.Sprite("images/level1.png", SPRITE_SCALING)
-        self.head.left = 350
-        self.head.bottom = 770
+        self.head.left = 320
+        self.head.bottom = 760
         self.head.draw()
 
         map = [[3, 6, 1.3], [19, 22, 1.3], [5, 8, 2.5],
@@ -118,8 +120,8 @@ class NoodleJump(arcade.Window):
         self.level_init()
 
         self.head = arcade.Sprite("images/level2.png", SPRITE_SCALING)
-        self.head.left = 350
-        self.head.bottom = 770
+        self.head.left = 320
+        self.head.bottom = 760
         self.head.draw()
 
         for x in range(0, 800, SPRITE_SIZE):
@@ -208,8 +210,8 @@ class NoodleJump(arcade.Window):
         self.level_init()
 
         self.head = arcade.Sprite("images/level3.png", SPRITE_SCALING)
-        self.head.left = 350
-        self.head.bottom = 770
+        self.head.left = 320
+        self.head.bottom = 760
         self.head.draw()
 
         for x in range(29, 200, SPRITE_SIZE):
@@ -282,6 +284,13 @@ class NoodleJump(arcade.Window):
     def level_4(self):
         self.level_init()
 
+        page_texture = arcade.load_texture('images/instructionpage.jpg')
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2.3,
+                                      page_texture.width,
+                                      page_texture.height, page_texture, 0)
+
+
+
     def level_init(self):
         self.wall_list = arcade.SpriteList()
         self.noodle_list = arcade.SpriteList()
@@ -290,19 +299,39 @@ class NoodleJump(arcade.Window):
         self.enemy_list = arcade.SpriteList()
 
     def draw_game_over(self):
+        self.level_init()
 
-        output = "Game Over"
-        arcade.draw_text(output, 240, 400, arcade.color.WHITE, 54)
+        page_texture = arcade.load_texture(
+                    'images/gameover.png')
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
+                                      page_texture.height,
+                                      page_texture.width, page_texture, 0)
 
-        output = "Click to restart"
-        arcade.draw_text(output, 310, 300, arcade.color.WHITE, 24)
+        output = f"{self.player1_score}"
+        arcade.draw_text(output, 259, 237, arcade.color.SAE, 25)
+        arcade.draw_text(output, 257, 238, arcade.color.ALIZARIN_CRIMSON, 25)
+        arcade.draw_text(output, 256, 239, arcade.color.UP_MAROON, 25)
+        # arcade.draw_text(output, 255, 240, arcade.color.BLACK, 25)
+
+        output = f"{self.player2_score}"
+        arcade.draw_text(output, 454, 237, arcade.color.SAE, 25)
+        arcade.draw_text(output, 452, 238, arcade.color.ALIZARIN_CRIMSON, 25)
+        arcade.draw_text(output, 451, 239, arcade.color.UP_MAROON, 25)
+        # arcade.draw_text(output, 450, 240, arcade.color.BLACK, 25)
+        
+        
 
     def setup(self):
         self.current_state = 1
         self.level_init()
 
-        self.level_1()
-        self.level = 1
+
+        if self.level == 1:
+            self.level_1()
+        elif self.level == 2:
+            self.level_2()
+        elif self.level == 3:
+            self.level_3()
 
         # floor
         for x in range(49, 100, SPRITE_SIZE):
@@ -350,9 +379,11 @@ class NoodleJump(arcade.Window):
     def draw_game(self):
 
         arcade.start_render()
-        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
+        if self.level != 4:    
+            arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
                                       SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
-
+        # else:
+        #     self.draw_game_over()
 
         self.player_list.draw()
         self.wall_list.draw()
@@ -386,18 +417,25 @@ class NoodleJump(arcade.Window):
         self.current = 1
 
     def on_draw(self):
-        
         if self.current_state == 1:
             self.draw_instruction()
 
-        else:
+        elif self.current_state == 2:
             self.draw_game()
+        else:
+            self.draw_game_over()
 
     def on_mouse_press(self, x, y, button, modifiers):
     
         if self.current_state == 1:
             self.current_state = 2
-        elif self.current_state == 2:
+        elif self.current_state == 2 and self.level == 1:
+            self.setup()
+        elif self.level == 3:
+            self.level = 1
+            self.current_state = 1
+            self.player1_score = 0
+            self.player2_score = 0
             self.setup()
 
     def draw_instruction(self):
@@ -412,7 +450,7 @@ class NoodleJump(arcade.Window):
         self.title.bottom = 720
         self.title.draw()
         
-        page_texture = arcade.load_texture('images/instructionpage.png')
+        page_texture = arcade.load_texture('images/instructionpage.jpg')
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2.3,
                                       page_texture.width,
                                       page_texture.height, page_texture, 0)
@@ -448,7 +486,7 @@ class NoodleJump(arcade.Window):
 
 
         # Update the player based on the physics engine
-        if self.current_state == 2 :
+        if self.current_state == 2:
             # Move the enemies
             self.noodle_list.update()
             self.door_list.update()
@@ -498,22 +536,17 @@ class NoodleJump(arcade.Window):
 
             elif len(player1_door_list) > 0 and self.level == 3:
                 self.player1_score += 300
-                # self.level += 1 
-                # self.level_4()
-                self.game_over = True
+                self.current_state = 3
+                self.draw_game_over()
 
             elif len(player2_door_list) > 0 and self.level == 3:
                 self.player2_score += 300
-                # self.level += 1
-                # self.level_4()
-                self.game_over = True
-
+                self.current_state = 3
+                self.draw_game_over()
             # Update the player using the physics engine
             self.physics1_engine.update()
             self.physics2_engine.update()
 
-        elif  self.game_over == True:
-            self.draw_game_over()
 
 def main():
     window = NoodleJump()
