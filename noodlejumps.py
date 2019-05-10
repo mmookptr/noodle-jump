@@ -431,7 +431,12 @@ class NoodleJump(arcade.Window):
             self.current_state = 2
         elif self.current_state == 2 and self.level == 1:
             self.setup()
-        elif self.level == 3:
+        elif self.level == 2:
+            self.level_2()
+        elif self.level == 3 and self.current_state == 2:
+            self.level_3()
+
+        elif self.level == 3 and self.current_state == 3:
             self.level = 1
             self.current_state = 1
             self.player1_score = 0
