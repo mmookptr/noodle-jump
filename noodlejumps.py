@@ -281,13 +281,6 @@ class NoodleJump(arcade.Window):
                 self.door_list.append(door)
             door.bottom *= 2
 
-    def level_4(self):
-        self.level_init()
-
-        page_texture = arcade.load_texture('images/instructionpage.jpg')
-        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2.3,
-                                      page_texture.width,
-                                      page_texture.height, page_texture, 0)
 
 
 
